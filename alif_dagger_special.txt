@@ -1,0 +1,8 @@
+alif dagger special
+--
+this file contains special replacement
+of word which using alif dagger.
+It is intended to be done manually,
+we consider these cases as wrong cases.
+--
+للَّهِ  للّٰهِ

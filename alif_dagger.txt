@@ -1,0 +1,41 @@
+Alif dagger replacement character
+--
+This file is supposed to be a 
+reference for find-replace 
+program.
+The writing of the alif dagger
+was obtained from hex level
+manipulation of the character.
+Beware of any caveat may exist.
+--
+
+ا  اَٰ  اٰ
+ب  بَٰ  بٰ
+ت  تَٰ  تٰ
+ث  ثَٰ  ثٰ
+ج  جَٰ  جٰ
+ح  حَٰ  حٰ
+خ  خَٰ  خٰ
+د  دَٰ  دٰ
+ذ  ذَٰ  ذٰ
+ر  رَٰ   رٰ
+ز  زَٰ   زٰ
+س  سَٰ  سٰ
+ش  شَٰ   شٰ
+ص  صَٰ  صٰ
+ض  ضَٰ  ضٰ
+ط  طَٰ  طٰ
+ظ  ظَٰ  ظٰ
+ع  عَٰ  عٰ
+غ  غَٰ  غٰ
+ف  فَٰ  فٰ
+ق  قَٰ  قٰ
+ك  كَٰ  كٰ
+ل  لَٰ  لٰ
+م  مَٰ  مٰ  
+ن  نَٰ  نٰ
+ه  هَٰ  هٰ
+و  وَٰ  وٰ
+ي  يَٰ  يٰ
+ء  ءَٰ  ءٰ
+--
