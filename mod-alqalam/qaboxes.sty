@@ -1,0 +1,737 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% (c) Hossam A.  H.  Fahmy 
+%
+%    This work may be distributed and/or modified under the
+%    conditions of the LaTeX Project Public License, either version 1.3
+%    of this license or (at your option) any later version.
+%    The latest version of this license is in
+%      http://www.latex-project.org/lppl.txt
+%    and version 1.3 or later is part of all distributions of LaTeX
+%    version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Hossam A. H. Fahmy.
+% (hfahmy@arith.stanford.edu)
+%
+% This work consists of all the files listed in alqalam_manifest.txt.
+% 
+% Based on the original work of the arabtex package.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 17 Shaban 1427, 10 Sep 2006
+%%%%%%%%%%%%%%%%%%%%%% qaboxes.sty %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% deposit character into output box
+% called in HMODE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\a@ident {qaboxes.sty} {1.1 build output boxes} {17.08.1427}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% dynamic definitions for Arabic
+{\catcode `\^ 7 \catcode `\ =9 \catcode `\^^M=9 \catcode `\^^I=9
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\gdef \def@arabaccent {% define accent macros for Arabic
+\gdef \put@fatha     { \put@acc@hi{\col@fatha{\char \a@fatha}        }}
+\gdef \put@damma     {\put@acc@hi {\col@damma{\char \a@damma}        }}
+\gdef \put@kasra     {\put@acc@lo {\col@kasra{\char \a@kasra}        }}
+\gdef \put@shadda    {\put@hi {\col@shadda{\char \a@shadda}          }}
+\gdef \put@hamza     {\put@hi     {\col@hamza{\char \a@hamza}        }}
+\gdef \put@hamzalo   {\put@lo     {\col@hamza{\char \a@hamza}        }}
+\gdef \put@madda     {\put@hi     {\col@madda{\a@madda@up}           }}
+\gdef \put@sukun     {\put@acc@hi {\col@sukun{\ifnewsukun\char\a@sukun\else\char\a@q@rhdz\fi} }} % sukun or ra's kha'
+\gdef \put@wasla     {\put@acc@hi {\col@wasla{\char \a@wasla}        }}
+\gdef \put@fathatan  {\put@acc@hi {\col@fatha{\iftanwin\char \a@fathatan\else\char \a@fathatwo\fi} }}%important for tanwin motataba
+\gdef \put@dammatan  {\put@acc@hi {\col@damma{\char \a@dammatan}     }}
+\gdef \put@kasratan  {\put@acc@lo {\col@kasra{\char \a@kasratan}     }}
+\gdef \put@fathaspec {\put@hi {\char \a@quran@alif}}% where color ?
+\gdef \put@kasraspec {\put@acc@lo {\col@quran{\char \a@quran@alif}   }}
+\gdef \put@dammaspec {\put@alif@hi {\col@quran{\char \a@quran@alif}  }}
+%\gdef \put@ammad     {\put@acc@hi {\col@ammad{\char \a@ammad}        }}
+%better inverted damma
+\gdef \put@ammad     {\put@acc@hi {\col@damma{\rotatebox{180}{\char \a@damma}        }}}
+\gdef \put@zwarakay  {\put@acc@hi {\col@zwarakkay{\char \a@zwarakay} }}
+\gdef \put@barslo    {\put@lo     {\col@bars{\char \a@bars}          }}
+\gdef \put@kh@hamza  {\put@hi     {\col@hamza{\char \a@hamza}        }}
+\gdef \put@kl@hamza  {\put@lo     {\col@hamza{\char \a@hamza}        }}
+\gdef \put@kh@hamz@s {\put@hi     {\col@hamza{\char \a@hamz@s}       }}
+\gdef \put@kl@hamz@s {\put@lo     {\col@hamza{\char \a@hamz@s}       }}
+
+\gdef \put@fathatwo  {\put@acc@hi {\col@fatha{\char \a@fathatwo}     }}%2006
+\gdef \put@dammatwo  {\put@acc@hi {\col@damma{\char \a@dammatwo}     }}%2006
+\gdef \put@kasratwo  {\put@acc@lo {\col@kasra{\char \a@kasratwo}     }}%2006
+
+
+%H% the Quranic diacrtic
+\gdef \put@q@sly    {\ifwide\put@w@acc@hi{\col@wakf{\char \a@q@sly}}\else\put@q@acc@hi{\col@wakf{\char \a@q@sly}  }\fi }
+\gdef \put@q@qly    {\ifwide\put@w@acc@hi{\col@wakf{\char \a@q@qly}}\else\put@q@acc@hi{\col@wakf{\char \a@q@qly}  }\fi }
+\gdef \put@q@lazm   {\put@spmrk@hi {\col@wakf{\SMALLER\char \a@q@lazm} }}
+\gdef \put@q@mam    {\put@spmrk@hi {\col@wakf{\char \a@q@mam} }}
+\gdef \put@q@j      {\ifwide\put@w@acc@hi{\col@wakf{\char\a@q@j}}\else\put@q@acc@hi{\col@wakf{\char\a@q@j}}\fi }
+\gdef \put@q@qdots  {\put@spmrk@hi {\col@wakf{\char \a@q@qdots} }}
+\gdef \put@q@sakt   {\put@seen@hi {\col@wakf{\vsmaller\char\a@q@sakt} }}
+\gdef \put@q@sadqf  {\ifwide\put@w@sad@hi{\col@wakf{\vsmaller\char\a@sad}}\else\put@q@sad@hi{\col@wakf{\vsmaller\char\a@sad}}\fi}
+
+
+\gdef \put@q@rhdz   {\put@acc@hi {\char \a@q@rhdz }}
+\gdef \put@q@rctz   {\put@acc@hi {\char \a@q@rctz }}
+\gdef \put@q@lseen  {\put@acc@lo {\vsmaller\char \a@q@lseen }}
+\gdef \put@q@rkhah  {\put@acc@hi {\char \a@q@rkhah }}
+
+
+\gdef \put@q@tashil{\put@hi{\smaller\char \a@q@eult}}
+
+\gdef \put@q@hmeem {\put@meem@hi {\vsmaller\char \a@q@hmeem }}
+\gdef \put@q@hmadd {\ifd@d \d@dfalse\put@hi {\LARGER\char \a@q@hmadd}\else\put@hi {\char \a@q@hmadd}\fi}
+%\gdef \put@q@syeh  {\put@lower{\vsmaller\char \a@q@syeh }}
+%\gdef \put@q@shyeh {\put@qmark@hi {\tiny\char \a@q@shyeh }}
+\gdef \put@q@shnoon{\put@qmark@hi {\SMALLER \char \a@q@shnoon }}
+\gdef \put@q@slmeem{\put@meem@lo {\vsmaller \char \a@q@slmeem }}
+\gdef \put@q@eshmam{\put@eshmam@hi {\Smaller \char \a@q@eshmam }}
+\gdef \put@q@emala{\put@lo {\Smaller \char \a@q@emala }}
+
+\gdef \put@q@wsol{{\SMALLER{\char\a@waw}}}
+\gdef \put@q@ysol{{\SMALLER {\char\a@q@syeh}} \put@lo{\a@kasra}}
+
+\gdef \put@q@akhr{\put@alif@hi { \char \a@quran@alif }}
+\gdef \put@q@eult{\put@acc@lo  {\col@wakf{\Smaller\char\a@q@eult }}}
+\gdef \put@Q@eult{\put@lower {\Smaller\char\a@q@eult }}
+\gdef \put@q@spolt{\put@hi {\char \a@q@spolt}}
+\gdef \put@q@spult{\put@lo {\char \a@q@spolt}}
+\gdef \put@q@ease{\Smaller\char\a@q@eult }
+
+%\gdef\put@q@wslmd{\a@q@swaw \put@alif@hi{{\SMALLER{\char \a@q@modah}}}}
+\gdef\put@q@yslmd{{  \SMALLER {\put@madd@hi} }}
+
+\gdef \put@q@ftmat{\put@hi{\char \a@q@ftmat}}
+\gdef \put@q@ksmat{\put@lo{\char \a@q@ftmat }}     
+\gdef \put@q@damat{\put@hi{\char \a@q@damat }}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+}}% end of dynamic definitions for Arabic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newdimen \a@dp         \newdimen \a@ht        \newdimen \a@wd    
+\newdimen \dia@dx       \newdimen \dia@dy      \newdimen \dia@ht
+\newdimen \a@disp       \newdimen \a@ic         
+\newbox   \ab@x         \newbox   \dia@box       
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%em# := 25.4dx#;        %ex# := 8dy#;
+
+\def \a@kern {\kern.05em } \def \a@mkern {\kern-.05em }% Arabic kerning
+\def \acc@hi {1.2ex }      \def \acc@lo {0.4ex }   % positions for .harakAt
+\def \acc@@hi {1.8ex }
+\def \acc@@@hi {2.1ex }
+\def \tat@ht {0.20ex }     \def \tat@wd {0.007em } % kashida dimensions
+\def \tat@skip {0.014em plus 0.2fil }
+\def \a@dsp {.5ex }         % shift for raised characters
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% global: \act@cd, \act@mod, \act@dia, \act@tie
+
+\def \put@skel #1#2#3*{% deposit writing syllable	% f d m *
+\ifd@d {\vsmaller{\put@act@box #1#2}}\d@dfalse%this condition to reduce small yeh only not %all the syllable because its shape is large
+\else\put@act@box #1#2\fi\put@mod #3*\dep@sitb@x\fix@act@box}%
+
+\def \put@lig@skel #1#2#3*#4*{% deposit 2char ligature  % f d m * m *
+\put@act@box #1#2\global\a@wd .5\wd\ab@x 
+\wd\ab@x \a@wd \dimen4 \a@ht \dimen6 \a@dp 
+\global\setbox \ab@x \vbox {\box \ab@x }\put@mod #3*\dep@sitb@x 
+\setbox0 \hbox to\a@wd {\hfill }\dp0 \dimen6 \ht0 \dimen4
+\global\a@ht \dimen4 \global\a@dp \dimen6
+\global\setbox \ab@x \vbox {\box0 }\put@mod #4*\dep@sitb@x 
+\fix@act@box }
+
+\def \put@act@box #1#2{% set tie and open character box
+\ifnum \act@tie = 0 \else \advance\act@tie \a@f@mid \put@tie \fi
+\advance\act@cd #2\xpa \dia@pos \act@dia #1\relax 
+\put@b@x {\the\act@cd }\if@mod@act \put@d@t {\the\act@mod }\fi }
+
+\def \put@tie {% deposit ties between characters
+\setbox0 \hbox {\char \the\act@tie }%
+\setbox2 \hbox {\char \the\act@tie \/}%
+\ifdim \a@disp = \z@ \unhcopy0 
+\else \raise\a@disp \hbox {\unhcopy0 }\fi 
+\global\advance\a@disp \wd2 \global\advance\a@disp -\wd0 }
+
+\def \set@high@act {% prepare raising of actual character
+\global\advance \a@disp \a@dsp \global\@high@acttrue }
+
+\def \set@low@act {% lower actual character
+\global\advance \a@disp -.25ex }
+
+\def \set@loww@act {% lower actual character
+\global\advance \a@disp -.50ex }
+
+\def \set@lowww@act {% lower actual character
+\global\advance \a@disp -.75ex }
+
+%*************** form qapatch.sty ********************************
+\def \fix@act@box {% fixup position and set tatwil
+\if@high@act \global\advance\a@disp -\a@dsp \global\@high@actfalse \fi 
+\global\advance\a@min@dp \a@ic \global\advance\a@disp \a@ic 
+\if@tat \put@tat \@tatfalse \fi}
+%******************************************************************
+
+\def \put@tat {% deposit a keshide
+\dimen@ \a@disp \advance\dimen@ \tat@ht \nobreak \hskip-\tat@wd
+\leaders \hrule height\dimen@ depth-\a@disp \hskip\tat@skip \hskip-\tat@wd }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def \put@b@x #1{% evaluate the argument
+\edef \t@mp {\nxp\put@box {\char #1}}\t@mp}
+
+\def \put@box #1{% pack and get dimensions, also ic and baseline skew 
+\setbox0 \hbox {#1\/}\global\a@ic \wd0 
+\global\setbox \ab@x \hbox{#1}% put into box
+\global\a@ht \ht\ab@x \global\a@wd \wd\ab@x   
+\global\a@dp \dp\ab@x \global\advance \a@ic -\a@wd 
+\a@adj@lo \a@min@dp 
+\ifnum \a@min > 0 \global\a@min@dp \a@dp \global\advance\a@min -1 
+\else \global\a@min@dp \z@ \fi }
+%\global\a@sk -\a@skew\a@wd 
+%\ifa@sk \global\a@skfalse \else \global\a@sk -\a@sk \fi }
+
+\def \dep@sitb@x {% put contents into output, unpack if possible
+\ifhbox \ab@x \ifdim \a@disp = \z@  \unhbox \ab@x
+              \else  \raise\a@disp \hbox {\unhbox\ab@x }%
+              \fi
+\else \global\advance \a@ht \a@disp \global\advance \a@dp -\a@disp
+              \ht\ab@x \a@ht \dp\ab@x \a@dp  \box \ab@x
+\fi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%H% this is modefied
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \put@mod #1+#2+#3*{% put modifier onto contents of "\ab@x" % m1 + m2 + m3 *
+        \global\red@mod   0#1\relax
+        \ifnum 0#1> 9 \global\advance \red@mod -10 \relax \fi
+
+       \ifcase \red@mod 
+        \relax  \or 
+        \put@shadda\or 
+        \put@hamza\or 
+        \put@hamza \put@shadda\or%
+        \put@madda\or% 
+        \put@hamzalo%
+        \fi%
+ 
+\put@voc 0#2+%           %H% the delemiter here was * but now +
+ 
+       
+\put@qmark 0#3*%           %H% the delemiter here is *
+ 
+}
+
+\def \a@putkasra #1{% modification at kasra                     % m1
+\ifcase 0#1\put@kasra  \or \put@k@sra \put@shadda            \or
+\put@ihamza \put@kasra \or \put@k@sra \put@hamza \put@shadda \or
+\put@madda \put@kasra  \or \put@hamzalo \put@kasra           \or
+\fi }
+
+\def \a@putkasratan #1{% modification at kasratan               % m1
+\ifcase 0#1\put@kasratan  \or \put@k@sratan \put@shadda \or
+\put@ihamza \put@kasratan \or \put@k@sratan \put@hamza \put@shadda \or
+\put@madda \put@kasratan  \or \put@hamzalo \put@kasratan           \or
+\fi }
+
+\def \put@k@sra {% high or low
+\ifk@sra \put@kasra \else \put@fatha \fi }
+
+\def \put@k@sratan {% high or low
+\ifk@sra \put@kasratan \else \put@fathatan \fi }
+
+\def \put@voc #1+{% put .harakAt         %H%delimeter chenged       % m2
+\ifcase 0#1\relax%    0
+\or \put@sukun%    
+\or \put@fatha%     
+\or \put@kasra%     
+\or \put@damma%       
+\or \put@fathatan%    5
+\or \put@kasratan%  
+\or \put@dammatan%  
+\or \put@zwarakay%    
+\or %   
+\or %                  10
+\or %
+\or \put@ammad% 
+\or \put@fatha\put@kasra% 
+\or \put@barslo%    
+\or \put@kh@hamza%  15
+\or \put@kl@hamza%  
+\or \put@kh@hamz@s%
+\or \put@kl@hamz@s%
+\or %\put@q@ftmat%
+\or %\put@q@ksmat%        20
+\or %\put@q@damat%
+\or \put@fathatwo%
+\or \put@kasratwo%
+\or \put@dammatwo%
+\fi%
+}
+
+%H% the defined shapes is added here 
+%%**************** Quranic marks in three modifiers *****************
+%% we can add up to three quranic marks in one syllable *************
+\def \put@qmark #1+#2+#3*{% put quranic harakAt         %H% I made it       % m3
+\ifcase 0#1 \relax%                         
+       \or \put@q@sly% 
+       \or \put@q@qly%  
+       \or \put@q@lazm%        
+       \or \put@q@mam% 
+       \or \put@q@j%                     5
+       \or \put@q@qdots%   
+       \or \put@q@sakt%              
+       \or \put@q@lseen%  
+       \or \put@wasla%
+       \or \put@Q@eult%                          10
+       \or \put@q@rhdz%   
+       \or \put@q@rctz%  
+       \or \put@q@lseen% 
+       \or \put@q@hmadd%      
+       \or %                  15
+       \or \put@q@slmeem%
+       \or %\put@q@shyeh% 
+       \or \put@q@shnoon%    
+       \or \put@q@hmeem%  
+       \or \put@q@rkhah%                 20
+       \or \put@q@wsol%   
+       \or \put@q@ysol%     
+       \or %\put@q@akhr% 
+       \or \put@q@eult% 
+       \or \put@q@spolt%                   25
+       \or \put@q@spult%     
+       \or \put@q@ease%
+       \or %\put@kl@hamza \put@kasra%     
+       \or \put@q@sadqf%
+       \or \put@q@wslmd%                   30
+       \or \put@q@yslmd% 
+       \or \put@fathaspec%
+       \or \put@kasraspec%
+       \or \put@dammaspec% 
+       \or \put@q@tashil%
+       \or \put@q@eshmam%
+       \or \put@q@emala% 
+       \or \put@kh@hamza%
+       \or \put@kl@hamza%
+\fi
+\ifcase 0#2 \relax%                         
+       \or \put@q@sly% 
+       \or \put@q@qly%  
+       \or \put@q@lazm%        
+       \or \put@q@mam% 
+       \or \put@q@j%                     5
+       \or \put@q@qdots%   
+       \or \put@q@sakt%              
+       \or \put@q@lseen%  
+       \or \put@wasla%
+       \or \put@Q@eult%                          10
+       \or \put@q@rhdz%   
+       \or \put@q@rctz%  
+       \or \put@q@lseen% 
+       \or \put@q@hmadd%      
+       \or %                  15
+       \or \put@q@slmeem% 
+       \or %\put@q@shyeh%
+       \or \put@q@shnoon%    
+       \or \put@q@hmeem%  
+       \or \put@q@rkhah%                 20
+       \or \put@q@wsol%   
+       \or \put@q@ysol%     
+       \or %\put@q@akhr% 
+       \or \put@q@eult% 
+       \or \put@q@spolt%                   25
+       \or \put@q@spult%     
+       \or \put@q@ease%
+       \or %\put@kl@hamza \put@kasra%     
+       \or \put@q@sadqf%
+       \or \put@q@wslmd%                   30
+       \or \put@q@yslmd% 
+       \or \put@fathaspec%
+       \or \put@kasraspec%
+       \or \put@dammaspec% 
+       \or \put@q@tashil%
+       \or \put@q@eshmam%
+       \or \put@q@emala% 
+       \or \put@kh@hamza%
+       \or \put@kl@hamza%
+\fi
+\ifcase 0#3 \relax%                         
+       \or \put@q@sly% 
+       \or \put@q@qly%  
+       \or \put@q@lazm%        
+       \or \put@q@mam% 
+       \or \put@q@j%                     5
+       \or \put@q@qdots%   
+       \or \put@q@sakt%              
+       \or \put@q@lseen%  
+       \or \put@wasla%
+       \or \put@Q@eult%                          10
+       \or \put@q@rhdz%   
+       \or \put@q@rctz%  
+       \or \put@q@lseen% 
+       \or \put@q@hmadd%      
+       \or %                  15
+       \or \put@q@slmeem% 
+       \or %\put@q@shyeh%
+       \or \put@q@shnoon%    
+       \or \put@q@hmeem%  
+       \or \put@q@rkhah%                 20
+       \or \put@q@wsol%   
+       \or \put@q@ysol%     
+       \or %\put@q@akhr% 
+       \or \put@q@eult% 
+       \or \put@q@spolt%                   25
+       \or \put@q@spult%     
+       \or \put@q@ease%
+       \or %\put@kl@hamza \put@kasra%     
+       \or \put@q@sadqf%
+       \or \put@q@wslmd%                   30
+       \or \put@q@yslmd% 
+       \or \put@fathaspec%
+       \or \put@kasraspec%
+       \or \put@dammaspec%
+       \or \put@q@tashil%
+       \or \put@q@eshmam%
+       \or \put@q@emala% 
+       \or \put@kh@hamza%
+       \or \put@kl@hamza%
+\fi }
+%************************* End of quran marks ************************
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \put@ihamza {% hamza at <i> depending on carrier
+\ifnum \act@cd = \a@alif@iso     \put@hamzalo \else
+\ifnum \act@cd = \a@alif@end     \put@hamzalo \else
+\ifnum \act@cd = \a@lam@alif@iso \put@hamzalo \else
+\ifnum \act@cd = \a@lam@alif@end \put@hamzalo \else
+   \put@hamza
+\fi\fi\fi\fi }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \a@one@up {\char \a@one@dot@up }
+
+\def \a@two@up {\char \a@two@dots@up }
+
+\def \a@twov@up {\setbox0 \hbox {\char \a@one@dot@up }%
+\setbox2 \hbox {\char \a@one@dot@up }\dimen@ .6\ht2 
+\advance \dimen@ -.4\dp0 \ht2 \dimen@ \advance \dimen@ \dp0
+\vbox {\moveright \a@slant\dimen@ \box0 \nointerlineskip \box2 }}
+
+\def \a@three@up {\char \a@three@dots@up }
+
+\def \a@threev@up {\setbox0 \hbox {\char \a@three@dots@down }%
+\ht0 \dp0 \dp0 .5\dp0 \box0 }
+
+\def \a@four@up {\setbox0 \hbox {\char \a@two@dots@up }%
+\setbox2 \hbox {\char \a@two@dots@up }\dimen@ .6\ht2 
+\advance \dimen@ -.4\dp0 \ht2 \dimen@ \advance \dimen@ \dp0
+\vbox {\moveright \a@slant\dimen@ \box0 \nointerlineskip \box2 }}
+
+\def \a@hamza@up {\setbox0 \hbox {\char \a@hamza }%
+\dp0 -\ht0 \box0 }
+
+
+\def \a@ttah@up {\char \a@ttah@dia }
+
+\def \a@bow@up {\char\a@bow@dia }
+
+\def \a@madda@up {\setbox0 \hbox {\char \a@madda \kern .02em}\box0 }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%function for small high yeh %%%%%%%%%%%%%
+\def \a@syeh {\vsmaller{\char \a@q@syeh}}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \a@one@down {\char \a@one@dot@down }
+
+\def \a@two@down {\char \a@two@dots@down }
+
+\def \a@twov@down {\setbox2 \hbox {\char \a@one@dot@down }%
+\setbox0 \hbox {\char \a@two@dots@down }\dimen@ .6\dp0 
+\setbox0 \hbox {\char \a@one@dot@down }% correct depth
+\advance \dimen@ -.4\ht2 \dp0 \dimen@ \advance \dimen@ \ht2
+\vbox {\moveright \a@slant\dimen@ \box0 \nointerlineskip \box2 }}
+
+\def \a@three@down {\setbox0 \hbox {\char \a@three@dots@down }%
+\dp0 .7\dp0 \box0 }
+
+\def \a@four@down {\setbox0 \hbox {\char \a@two@dots@down }%
+\setbox2 \hbox {\char \a@two@dots@down }\dimen@ .6\dp0 
+\advance \dimen@ -.4\ht2 \dp0 \dimen@ \advance \dimen@ \ht2
+\vbox {\moveright \a@slant\dimen@ \box0 \nointerlineskip \box2 }}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \put@d@t #1{% evaluate the argument
+\edef \t@mp {\nxp\put@dot {#1}}\t@mp }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %H% Modifier %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{modi}
+
+\def \put@dot #1{% modify character skeleton
+
+\ifnum \number\value{modi} =1 \relax \else
+\ifcase 0#1%
+\relax                  \or                           %  0
+%     .       ..      ^       
+%  1 ---   2 ---   3 ---   4 ---   5 ---   6 ---
+%                             .       ..      v
+\put@hi {\a@one@up     }\or                           %  1
+\put@hi {\a@two@up     }\or                           %  2
+\put@hi {\a@three@up   }\or                           %  3
+\put@lo {\a@one@down   }\or                           %  4
+\put@lo {\a@two@down   }\or                           %  5
+\put@lo {\a@three@down }\or                           %  6
+%     c       b               .               u
+%  7 ---   8 ---   9 ---  10 ---  11 ---  12 ---
+%                     :       .       6   
+\put@hi {\a@hamza@up   }\or                           %  7
+\put@hi {\a@ttah@up    }\or                           %  8
+\put@lo {\a@twov@down  }\or                           %  9
+\put@hi {\a@one@up     }\put@lo {\a@one@down }\or     % 10
+\put@lo {\char\a@h@dia }\or                           % 11
+\put@hi {\a@bow@up     }\or                           % 12
+%             u       :       v       ::
+% 13 ---  14 ---  15 ---  16 ---  17 ---  18 ---
+%     u       ..                              ::
+\put@lo {\a@bow@up     }\or                           % 13
+\put@lo {\a@two@down   }\put@hi {\a@bow@up }\or       % 14
+\put@hi {\a@twov@up    }\or                           % 15
+\put@hi {\a@threev@up  }\or                           % 16
+\put@hi {\a@four@up    }\or                           % 17
+\put@lo {\a@four@down  }\or                           % 18
+%     9       |       b       ^       .       ^
+% 19 ---  20 ---  21 ---  22 ---  23 ---  24 ---
+%                     .       v       v       .
+\put@hi {\char\a@damma }\or                           % 19
+\put@hi {\a@alif@up    }\or                           % 20
+\put@hi {\a@ttah@up    }\put@lo {\a@one@down   }\or   % 21
+\put@hi {\a@three@up   }\put@lo {\a@three@down }\or   % 22
+\put@hi {\a@one@up     }\put@lo {\a@three@down }\or   % 23
+\put@hi {\a@three@up   }\put@lo {\a@one@down   }\or   % 24
+%     ^               C                        
+% 25 ---  26 ---  27 ---  28 ---  29 ---  30 ---
+%             H               C              
+%
+\put@hi {\char\a@roof  }\or                           % 25
+\put@lo {\char\a@bars  }\or                           % 26
+\put@hi {\char\a@hamz@s}\or                           % 27
+\put@lo {\char\a@hamz@s}\or                           % 28
+\put@aya\or                                           % 29
+%ld: we shall hack this because it triggers alif dagger harakat error in the following char
+%    ا د ذ ر ز و ء 
+%\put@alif{\char\a@quran@alif}\or                      % 30                                   % 30
+\put@fathaspec\or
+\put@hi {\a@syeh}\or                                  % 31
+\put@hi {\char 2 }\or                           % illegal
+\else \put@hi {\char 2 }\or                           % illegal
+\fi\fi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \put@hi #1{% deposit upper modifier, slanted
+\setbox\dia@box \hbox to \z@ {\hss #1\hss }%
+\dia@dy \a@ht \hi@dia \put@upper }
+
+\def \put@acc@hi #1{% deposit upper accent
+\ifhigh \a@adj@hi \acc@hi \fi 
+\setbox\dia@box \hbox to \z@ {\hss #1\hss }%
+\dia@dy \a@ht \a@ubox@u \put@upper }
+
+\def \put@q@acc@hi #1{% deposit upper accent %genaral quran mark
+\a@adj@hi \acc@@hi
+\setbox\dia@box \hbox to \z@ {\hss #1\hss }%
+\dia@dy \a@ht \a@ubox@u \put@upper }
+
+\def \put@w@acc@hi #1{% deposit upper accent %if wide charcters bellow
+\a@adj@hi \acc@@hi 
+\setbox\dia@box \hbox to \z@ {\hss #1}%
+\dia@dy \a@ht \a@ubox@u \put@upper }
+
+
+\def \put@q@sad@hi #1{% deposit upper accent %genaral quran mark
+\a@adj@hi \acc@@@hi 
+\setbox\dia@box \hbox to \z@ {\hss #1\hss }%
+\dia@dy \a@ht \a@ubox@u \put@upper }
+
+\def \put@w@sad@hi #1{% deposit upper accent %if wide charcters bellow
+\a@adj@hi \acc@@@hi 
+\setbox\dia@box \hbox to \z@ {\hss #1}%
+\dia@dy \a@ht \a@ubox@u \put@upper }
+
+\def \put@meem@hi #1{% deposit upper accent
+\setbox\dia@box\hbox{\raise 0.1ex\hbox to \z@{\hss #1 \hss}}%
+\dia@dy \a@ht \a@ubox@c \put@upper }
+
+\def \put@qmark@hi #1{% deposit upper Qur'an mark
+\setbox\dia@box \hbox to \z@ {\hss #1\a@kern }%H% remove hss and put a@kern
+\dia@dy \a@ht \hi@dia  \put@upper  }
+
+
+
+
+%****************** Safwat work in \put@spmrk@hi **************************
+% this function is used to raise stop marks
+% the old function was defined as:
+%
+%\def \put@spmrk@hi #1{% deposit upper Qur'an stoping symbole
+%\hbox{\raise 14pt \hbox{\hss #1\kern -8pt}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% the old function forces the stop mark i.e qly, sly... to raise at fixed 
+% hight defined as 14pt the shift it to be at acceptable position related 
+% to chracter, the fault here was in the fixed hight defined in the function
+% so when we use \vsmaller or \Huge it will not appear correctly
+% The solution here is to use the defintion of \put@acc@hi with two changes
+%  1: in raising part we must make it relative to the base character 
+%     so we used \raise 1ex to be relative
+%  2: shifting part here is without using \kern -8pt which not related to chracter
+%     but using \hss, also we may use \kern with "em" not "pt"
+% The new function is defined bellow
+%**************************************************************************
+\def \put@spmrk@hi #1{% deposit upper Qur'an stoping symbole
+\setbox\dia@box\hbox{\raise 1ex\hbox to \z@{\hss #1 \hss}}%
+\dia@dy \a@ht \a@ubox@u \put@upper} 
+
+\def \put@sad@hi #1{% deposit upper Qur'an stoping symbole
+\hbox{\raise 2.7ex \hbox{\hss #1\kern-.6em}}}
+
+%**************************************************************************
+%************ End of \put@spmark@hi function ******************************
+\def \put@seen@hi #1{% deposit upper Qur'an stoping symbole
+\setbox\dia@box\hbox{\raise .3ex\hbox to \z@{\hss #1 \hss}}%
+\dia@dy \a@ht \a@ubox@u \put@upper} 
+
+%******************* Abdelnasser work in \put@alif@hi *********************
+%**************************************************************************
+% this function is used to deposite alif khangaria on space betwin 2 characters
+% The old function was :
+%
+%\def \put@alef@hi #1{% deposit alef in space
+%\hbox{\raise 4pt \hbox{\hss #1\hss}} %  %H%to make Alef khngareyh in space
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% here the problem was in \raise 4pt which not relative to chracter 
+% and ,also in shifting part
+% The solution is to:
+%  1- raise alif using \raise .7ex
+%  2- shifting alif using \hss #1\a@mkern
+% noting that I tried to use the function \put@acc@hi with modified parameters
+% but i did not get acceptable result  
+%**************************************************************************
+%\def \put@alif@hi #1{% deposit alif in space
+%\hbox{\raise .7ex\hbox{\hss #1\a@mkern}}} %  %H%to make Alef khngareyh in space 
+
+\def \put@alif #1{% deposit upper modifier, slanted
+\setbox\dia@box\hbox to \z@ {\hss #1\hss}%
+\dia@dy \a@ht \a@ubox@c \put@upper} 
+%**************************************************************************
+%**************** End of \put@alif@hi function ****************************
+
+
+%******************* the new function for ayacounter ********************
+%************************************************************************
+%% we identified the ayacounter as a character with unicode not 
+%% with command(\*) 
+%% and we used empty skeleton with modifier function \put@aya 
+%% which  produce the shape of aya inside it the number of the aya (ayac)
+%%********************** the function ************************************
+\newcounter{ayac}%
+\def \put@aya {\stepcounter{ayac}\setbox1=\hbox to 3.6ex{\hfill\Smaller\number%
+\value{ayac}\hfill}\setbox\ab@x=\hbox{\rlap{\box1}\RL{\char'332}}}
+%************************** end of function of aya ************************
+
+\def \put@madd@hi{%   
+\vtop {\hbox{\char \a@q@modah} \hbox {\char\a@q@syeh}}   
+ } 
+
+\def \put@lo #1{% deposit lower modifier, slanted
+\setbox\dia@box \hbox to \z@ {\hss #1\hss }%
+\a@adj@lo \a@min@dp \dia@dy \a@dp \lo@dia \put@lower }
+
+\def \put@acc@lo #1{% deposit lower accent
+%\ifacc@hi \a@adj@lo \acc@lo \fi 
+\setbox\dia@box \hbox to \z@ {\hss #1\hss }%
+\dia@dy \a@dp \a@lbox@d \put@lower }
+
+\def \put@meem@lo #1{% deposit lower accent
+\setbox\dia@box\hbox{\raise -.4ex\hbox to \z@{\hss #1 \hss}}%
+\dia@dy \a@dp \a@lbox@c \put@lower }
+
+\def \put@eshmam@hi #1{% deposit upper Qur'an stoping symbole
+\setbox\dia@box\hbox{\raise -2ex\hbox to \z@{\hss #1 \hss}}%
+\dia@dy \a@ht \a@ubox@c \put@upper}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \hi@dia {% position of upper diacritic
+\ifcase \dia@mod \relax
+\a@ubox@u \or \a@ubox@d \or \a@ubox@u \or
+\a@ubox@d \or \a@ubox@u \or \a@ubox@d \or
+\a@ubox@c \or \a@ubox@c \or \a@ubox@c \or
+\fi }
+
+\def \lo@dia {% position of lower diacritic
+\ifcase \dia@mod \relax
+\a@lbox@d \or \a@lbox@d \or \a@lbox@u \or
+\a@lbox@u \or \a@lbox@c \or \a@lbox@c \or
+\a@lbox@d \or \a@lbox@u \or \a@lbox@c \fi }
+
+\def \a@adj@hi #1{% adjustment of box height
+\dimen@ #1\advance\dimen@ -\a@disp%
+\ifdim \dimen@ > \a@ht \advance\dimen@ -\a@ht
+  \global\advance\a@ht \dimen@ \global\setbox\ab@x \vbox
+  {\kern\dimen@ \nointerlineskip
+  \ifvbox\ab@x \unvbox\ab@x \else \box\ab@x \fi }\fi }
+
+\def \a@adj@lo #1{% adjustment of box depth
+\dimen@ #1\advance\dimen@ \a@disp
+\ifdim \dimen@ > \a@dp \advance\dimen@ -\a@dp 
+  \global\advance\a@dp \dimen@ \global\setbox\ab@x \vbox
+  {\ifvbox\ab@x \unvbox\ab@x \else \box\ab@x \fi
+  \nointerlineskip \kern\dimen@ }\fi }
+
+\def \a@ubox@u {% upper box above
+\dimen@ \ht\dia@box \advance\dimen@ \dp\dia@box
+\advance\dia@dy .5\dimen@ \global\advance \a@ht \dimen@ }
+
+\def \a@ubox@d {% upper box lowered
+\dimen@ \ht\dia@box \advance\dimen@ \dp\dia@box 
+\advance\dia@dy -.5\dimen@ \dp\dia@box -\ht\dia@box }
+
+\def \a@ubox@c {% upper box centered
+\dimen@ .5\ht\dia@box \advance\dimen@ .5\dp\dia@box
+\global\advance \a@ht  \dimen@
+\advance\dimen@ -\ht\dia@box \dp\dia@box \dimen@ }
+
+\def \a@lbox@d {% lower box below
+\dimen@ \ht\dia@box \advance\dimen@ \dp\dia@box
+\advance \dia@dy .5\dimen@ \global\advance \a@dp \dimen@ }
+
+\def \a@lbox@u {% lower box raised
+\dimen@ \ht\dia@box \advance\dimen@ \dp\dia@box
+\advance \dia@dy -.5\dimen@ \ht\dia@box -\dp\dia@box }
+
+\def \a@lbox@c {% lower box centered
+\dimen@ \ht\dia@box \advance\dimen@ \dp\dia@box
+\advance \dia@dy -.5\dimen@ \advance \dia@dy -.75\a@dp
+\advance\dimen@ -2\ht\dia@box \advance\dimen@ 1.5\a@dp
+\dp\dia@box .4\dimen@ \ht\dia@box -\dp\dia@box }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \put@upper {\dia@dx \a@slant\dia@dy \advance\dia@dx .5\a@wd 
+\advance\dia@dx \dia@hadj\a@dx \global\setbox\ab@x \vbox 
+{\moveright\dia@dx \box\dia@box \nointerlineskip
+\ifvbox\ab@x \unvbox\ab@x \else \box\ab@x \fi }\wd\ab@x \a@wd }
+
+\def \put@lower {\dia@dx -\a@slant\dia@dy \advance\dia@dx .5\a@wd 
+\advance\dia@dx \dia@hadj\a@dx \global\setbox \ab@x \vbox 
+{\ifvbox\ab@x \unvbox\ab@x \else \box\ab@x \fi 
+\nointerlineskip \moveright\dia@dx \box\dia@box }\wd\ab@x \a@wd }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\endinput
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% EOF %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

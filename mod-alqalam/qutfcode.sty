@@ -1,0 +1,358 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% (c) Hossam A.  H.  Fahmy 
+%
+%    This work may be distributed and/or modified under the
+%    conditions of the LaTeX Project Public License, either version 1.3
+%    of this license or (at your option) any later version.
+%    The latest version of this license is in
+%      http://www.latex-project.org/lppl.txt
+%    and version 1.3 or later is part of all distributions of LaTeX
+%    version 2005/12/01 or later.
+% 
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Hossam A. H. Fahmy.
+% (hfahmy@arith.stanford.edu)
+%
+% This work consists of all the files listed in alqalam_manifest.txt.
+%
+% Based on the original work of the arabtex package.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 17 Shaban 1427, 10 Sep 2006
+%%%%%%%%%%%%%%%%%%%%%%%%%%% qutfcode.sty %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% qutfcode.sty 
+% scanner module for the Arabic and Hebrew segments of UTF-8
+% loaded and called by qutf8.sty
+%
+% Compared to the original utfcode.sty from ArabTeX, this file adds more
+% codes needed specifically in the typesetting of the Qur'an
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\catcode`\@ = 11
+
+\a@ident {qutfcode.sty} {1.0 Arabic+Hebrew+Qur'an segment of UTF-8} {15.01.1427}
+
+\newcount \u@lb	\newcount \u@lq
+
+\newif \ifa@quote
+
+\def \utfc@scan #1>{% modified scanner call: token sequence -> \a@tokens
+\iftest@scan \tracingmacros = 1 \fi
+\global\def \a@rest {}\global\a@tokens = {}\def \sc@char {}%
+\utf@beg #1\@ \@ \@ \@@ % transform
+\iftest@scan \tracingmacros = 0 \xpa \a@verb \xpa (\the\a@tokens )>\fi }
+
+\def \utf@beg #1#2{% start UTF-8 scanner
+\h@mzafalse  \iz@fetfalse \novocalize % because of explicit quoting
+	\@ssimfalse
+	\def \next {\utf@word #1#2}%
+\ifnum `#1="D8 \ifnum `#2="27 \def \next {\utf@alif }\fi \else
+%\ifx #1"\def \next {\utf@lquote #2}\else
+\ifx #1/\global \a@tokens ={#1}\def \next {\utf@word #2}\else % x>
+%\fi
+\fi\fi \next }
+
+
+{\catcode `\^ 7 \catcode `\^^M=13
+\gdef \utf@word #1{% transform input into internal notation
+\ifx #1\@ \def \next {\utf@end }\else		% finished
+\ifx #1-\def \next {\utf@minus }\else %
+\ifx #1/\def \next {\sc@back #1}\else %
+\ifnum `#1="D6 \def \next {\utf@dvi }\else %
+\ifnum `#1="D7 \def \next {\utf@dvii }\else %
+\ifnum `#1="D8 \def \next {\utf@dviii }\else %
+\ifnum `#1="D9 \def \next {\utf@dix }\else %
+\ifnum `#1="DA \def \next {\utf@da }\else %
+\ifnum `#1="DB \def \next {\utf@db }\else %
+\ifnum `#1="E2 \def \next {\utf@eii }\else %
+	\def \next {\utf@asci #1}%
+\fi %
+\fi\fi\fi\fi\fi\fi %
+\fi\fi\fi \next }%
+} % catcode 13
+
+\def \utf@end #1\@@ {\relax }
+
+\def \utf@next {% save and deposit character
+\sc@put \utf@word }
+
+\def \utf@asci #1{% deposit ASCII item
+\def \sc@char {#1}\utf@next }
+
+{\catcode `\% 12 \gdef \a@pc {%}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \utf@dvi #1{% segment D6
+	\u@lb `#1\relax \advance \u@lb -128 
+	\u@lq \u@lb \divide \u@lq 8
+	\edef \sc@char {}%
+\ifcase \u@lq \or \or \or \or \or 
+\or \advance \u@lb -48 \edef \sc@char 
+	{\ifcase \u@lb
+	"\n@xp\a@e\or "\n@xp\a@I\or "\n@xp\a@A\or "\n@xp\a@O\or 
+	"i\or "\n@xp\a@E\or "e\or "a\or
+	\fi }%
+\or \advance \u@lb -56 \edef \sc@char 
+	{\ifcase \u@lb
+	"A\or "\n@xp\a@o\or L\or "u\or 
+	"\n@xp\a@Zu\or |\or B\or "\n@xp\a@Zo\or
+	\fi }%
+\fi \utf@next }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \utf@dvii #1{% segment D7
+	\u@lb `#1\relax \advance \u@lb -128 
+	\u@lq \u@lb \divide \u@lq 8
+\ifcase \u@lq \edef \sc@char 
+	{\ifcase \u@lb
+	K\or "\n@xp\a@Ze\or "\n@xp\a@Za\or :\or "\n@xp\a@Zi\or \or \or \or
+	\fi }%
+\or \advance \u@lb  -8 \edef \sc@char {}%
+\or \advance \u@lb -16 \edef \sc@char 
+	{\ifcase \u@lb
+	Q\or b\or g\or d\or h\or w\or z\or X\or
+	\fi }%
+\or \advance \u@lb -24 \edef \sc@char 
+	{\ifcase \u@lb
+	C\or y\or k\or k\or l\or m\or m\or n\or
+	\fi }%
+\or \advance \u@lb -32 \edef \sc@char 
+	{\ifcase \u@lb
+	n\or s\or P\or p\or p\or S\or S\or q\or
+	\fi }%
+\or \advance \u@lb -40 \edef \sc@char 
+	{\ifcase \u@lb
+	r\or \n@xp\a@S \or t\or \or \or \or \or \or
+	\fi }%
+\or \advance \u@lb -48 \edef \sc@char 
+	{\ifcase \u@lb
+%	w\n@xp\a@U w\or wy\or y\n@xp\a@U y\or '\or 
+	\n@xp\a@w \or \n@xp\a@p \or \n@xp\a@h \or '\or 
+	''\or \or \or \or
+	\fi }%
+\or \advance \u@lb -56 \edef \sc@char 
+	{\ifcase \u@lb
+	\or \or \or \or \or \or \or "|\or
+	\fi }%
+\fi \utf@next }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def \utf@dviii #1{% segment D8
+	\u@lb `#1\relax \advance \u@lb -"80 
+	\u@lq \u@lb \divide \u@lq 8
+\ifcase \u@lq 	               \edef \sc@char {}%
+\or  \advance \u@lb  -8        \edef \sc@char {\ifcase \u@lb%
+     "\n@xp\a@qsadqf%  
+ \or %"\n@xp\a@qyslmd%   
+ \or %"\n@xp\a@qwslmd%
+ \or "\n@xp\a@qease%
+ \or % 
+ \or %"\n@xp\a@qwsol% 
+ \or %"\n@xp\a@qakhr% "Removed" alif kangaria now has one unicode ^^d9^^b0
+ \or "\n@xp\a@qeult% 
+% 
+\or   \fi }%
+
+\or  \advance \u@lb -"10       \edef \sc@char {\ifcase \u@lb%
+ \n@xp\a@qafgs%  
+ \or \n@xp\a@qafps%   
+ \or \n@xp\a@qafpgs% 
+ \or "aM% 
+ \or "iM% 
+ \or "uM%
+ \or "\n@xp\a@qspolt% %H% 
+ \or "\n@xp\a@qspult% %H% 
+% 
+\or   \fi }%
+
+\or  \advance \u@lb -"18       \edef \sc@char {\ifcase \u@lb
+ "\n@xp\a@qysol	
+\or%
+\or%
+\or    ;%
+\or%   
+\or%    
+\or%    
+\or%    ?
+\or   \fi }%
+
+\or  \advance \u@lb -"20       \edef \sc@char {\ifcase \u@lb
+	\or    Q|\or  QA\or  Qa\or  Qw\or  Qi\or  Qy\or  A\or   \fi }%
+\or  \advance \u@lb -"28       \edef \sc@char {\ifcase \u@lb
+	b\or   T\or   t\or   C\or G\or   H\or   X\or   d\or  	\fi }%
+\or  \advance \u@lb -"30       \edef \sc@char {\ifcase \u@lb
+	F\or   r\or   z\or   s\or   x\or   S\or   D\or   V\or   \fi }%
+\or  \advance \u@lb -"38       \edef \sc@char {\ifcase \u@lb
+	Z\or   P\or   R\or   \or    \or    \or    \or    \or    \fi }%
+\fi \utf@next }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \utf@dix #1{% segment D9
+	\u@lb `#1\relax \advance \u@lb -"80 
+	\u@lq \u@lb \divide \u@lq 8
+\ifcase \u@lq 		       \edef \sc@char {\ifcase \u@lb
+	B\or   f\or   q\or   k\or   l\or   m\or   n\or   h\or   \fi }%
+\or  \advance \u@lb  -8        \edef \sc@char {\ifcase \u@lb
+	w\or   Y\or   y\or   "aN\or "uN\or "iN\or "a\or  "u\or  \fi }%
+\or  \advance \u@lb -"10       \edef \sc@char {\ifcase \u@lb
+	"i\or  "\n@xp\a@Ze\or "\n@xp\a@e\or "\n@xp\a@ZE\or 
+	"\n@xp\a@Za\or "\n@xp\a@Zu\or \or "\n@xp\a@u\or \fi }%
+\or  \advance \u@lb -"18       \edef \sc@char {}%
+\or  \advance \u@lb -"20       \edef \sc@char {\ifcase \u@lb
+	0\or   1\or   2\or   3\or   4\or   5\or   6\or   7\or   \fi }%
+\or  \advance \u@lb -"28       \edef \sc@char {\ifcase \u@lb
+	8\or           9\or           \a@pc\or       \f@sila\or   
+	\f@sila\or     *\or	\n@xp\a@b\or	\n@xp\a@bq\or	\fi }%
+\or  \advance \u@lb -"30       \edef \sc@char {\ifcase \u@lb
+	"\n@xp\a@a \or  "\n@xp\a@qwsl\or     "\n@xp\a@ZA\or "\n@xp\a@ZU\or          
+%      N"\n@xp\a@Za\or Qa\or          Qw\or          Qw"u\or        \fi }%
+N"\n@xp\a@Za\or N"\n@xp\a@Za A\or N"\n@xp\a@Za w\or N"\n@xp\a@Za w"u\or \fi }%
+\or  \advance \u@lb -"38       \edef \sc@char {\ifcase \u@lb
+%	Qy\or          \n@xp\a@t\or   \n@xp\a@T\or   \n@xp\a@ab\or  
+	N"\n@xp\a@Za Y\or \n@xp\a@t\or   \n@xp\a@T\or   \n@xp\a@ab\or  
+	\n@xp\a@v\or   \n@xp\a@at\or  p\or           \n@xp\a@ac\or  \fi }%
+\fi \utf@next }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \utf@da #1{% segment DA
+	\u@lb `#1\relax \advance \u@lb -"80 
+	\u@lq \u@lb \divide \u@lq 8
+\ifcase \u@lq                  \edef \sc@char {\ifcase \u@lb
+	\n@xp\a@ap\or  c\or           \n@xp\a@G\or   \n@xp\a@ag\or  
+	\n@xp\a@ah\or  \n@xp\a@c\or   J\or           \n@xp\a@aj\or  \fi }%
+\or  \advance \u@lb  -8        \edef \sc@char {\ifcase \u@lb
+	\n@xp\a@d\or   \n@xp\a@aA\or  \n@xp\a@D\or   \n@xp\a@aB\or  
+	\n@xp\a@ad\or  \n@xp\a@af\or  \n@xp\a@aC\or  \n@xp\a@ae\or  \fi }%
+\or  \advance \u@lb -"10       \edef \sc@char {\ifcase \u@lb
+	\n@xp\a@aD\or  \n@xp\a@r\or   \n@xp\a@aF\or  \n@xp\a@q\or  
+	\n@xp\a@aG\or  \n@xp\a@R\or   \n@xp\a@z\or   \n@xp\a@aH\or  \fi }%
+\or  \advance \u@lb -"18       \edef \sc@char {\ifcase \u@lb
+	j\or           \n@xp\a@ar\or  \n@xp\a@s\or   \n@xp\a@aJ\or  
+	\n@xp\a@aK\or  \n@xp\a@aL\or  \n@xp\a@aM\or  \n@xp\a@aO\or  \fi }%
+\or  \advance \u@lb -"20       \edef \sc@char {\ifcase \u@lb
+	\n@xp\a@p\or   \n@xp\a@f\or   \n@xp\a@F\or   \n@xp\a@aP\or  
+	v\or           \n@xp\a@V\or   \n@xp\a@aq\or  \n@xp\a@aQ\or  \fi }%
+\or  \advance \u@lb -"28       \edef \sc@char {\ifcase \u@lb
+	\n@xp\a@aR\or  \n@xp\a@k\or   \n@xp\a@ax\or  \n@xp\a@g\or  
+	\n@xp\a@L\or   K\or           \n@xp\a@aS\or  g\or           \fi }%
+\or  \advance \u@lb -"30       \edef \sc@char {\ifcase \u@lb
+	\n@xp\a@J\or   \n@xp\a@al\or  \n@xp\a@aT\or  \n@xp\a@ak\or  
+	\n@xp\a@M\or   \n@xp\a@l\or   \n@xp\a@aW\or  \n@xp\a@aX\or  \fi }%
+\or  \advance \u@lb -"38       \edef \sc@char {\ifcase \u@lb
+	\n@xp\a@aY\or  \n@xp\a@aZ\or  \n@xp\a@n\or   \n@xp\a@an\or  
+	\n@xp\a@m\or   \n@xp\a@am\or  h-\or          \n@xp\a@aE\or  \fi }%
+\fi \utf@next }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \utf@db #1{% segment DB
+	\u@lb `#1\relax \advance \u@lb -"80 
+	\u@lq \u@lb \divide \u@lq 8
+\ifcase \u@lq                  \edef \sc@char {\ifcase \u@lb
+	Qh\or          \n@xp\a@h\or   \n@xp\a@B\or  \n@xp\a@j\or  
+	\n@xp\a@aU\or  \n@xp\a@aV\or  \n@xp\a@W\or  \n@xp\a@w\or    \fi }%
+\or  \advance \u@lb  -8        \edef \sc@char {\ifcase \u@lb
+	\n@xp\a@aw\or  \n@xp\a@au\or  \n@xp\a@av\or  \n@xp\a@X\or  
+	Y\or           L\or           \n@xp\a@az\or  \n@xp\a@x\or   \fi }%
+%%%%%%%%%%%%%%%%%%%%%%%%%% SLY & QLY ADDED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\or  \advance \u@lb -"10       \edef \sc@char {\ifcase \u@lb
+	\n@xp\a@Y
+\or   \n@xp\a@y
+\or   E
+\or     \n@xp\a@ayfasy
+\or  B
+\or         \n@xp\a@H
+\or  "\n@xp\a@qsly
+\or  "\n@xp\a@qqly
+\or \fi }%
+%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%_%
+\or  \advance \u@lb -"18     \edef \sc@char {\ifcase \u@lb 
+    "\n@xp\a@qmam%
+\or "\n@xp\a@qlazm%
+\or "\n@xp\a@qj%
+\or "\n@xp \a@qdots%
+\or "\n@xp \a@qsakt%
+\or \n@xp \a@qaya% 
+\or \n@xp \a@qqhzb%
+\or "\n@xp\a@qrhdz         
+\fi}%
+%____%____%____%____%____%____%____%____%____%____%____%____%
+%%%%%%%%%%%%%%%%%%%%%%%%%% RKHAH, LSEEN  ADDED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\or  \advance \u@lb -"20       \edef \sc@char{\ifcase \u@lb
+      "\n@xp\a@qrctz \or "\n@xp\a@qrkhah\or "\n@xp\a@qhmeem\or"\n@xp\a@qlseen\or"\n@xp\a@qhmadd \or\n@xp\a@qswaw \or\n@xp\a@qsyeh\or
+\n@xp\a@qshyeh%
+\fi}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\or  \advance \u@lb -"28       \edef \sc@char {\ifcase \u@lb 
+	"\n@xp\a@qshnoon\or \n@xp\a@sajda \or "\n@xp\a@qeshmam         
+	\or"\n@xp\a@qemala  
+	\or "\n@xp\a@qtashil  \or "\n@xp\a@qslmeem % it was \n@xp\a@bd from klaus
+	\or \n@xp\a@br\or  \fi }%
+\or  \advance \u@lb -"30       \edef \sc@char {\ifcase \u@lb
+	0\or           1\or           2\or           3\or  
+	4\or           5\or           6\or           7\or  \fi }%
+\or  \advance \u@lb -"38       \edef \sc@char {\ifcase \u@lb
+	8\or           9\or           \n@xp\a@aI\or  \n@xp\a@aN\or  
+	\n@xp\a@P\or   \n@xp\a@ai"\n@xp\a@Zi\or 
+	\n@xp\a@ao"\n@xp\a@Zi\or	\n@xp\a@bh-\or		\fi }%
+\fi \utf@next }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \utf@eii #1#2{% segment E2
+	\u@lb `#1\relax \advance \u@lb -128 
+	\u@lq `#2\relax \advance \u@lq -128 
+	\edef \sc@char {}%
+\ifnum \u@lb = 0 
+\ifnum \u@lq = 12 % ZERO WIDTH NON-JOINER (U+200C)
+	\edef \sc@char {\n@xp\a@ba}\else
+\ifnum \u@lq = 13 % ZERO WIDTH JOINER (U+200D)
+	\edef \sc@char {-}\else
+\fi\fi\fi \utf@next }
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def \utf@alif {% alif at the beginning of a word
+\def \sc@char {a}\sc@put \utf@word }
+
+\def \utf@minus {% hyphen between words
+\def \sc@char {-}\sc@put \utf@beg }
+%\def \sc@char {B}\sc@put \utf@beg }
+
+\def \utf@lquote {% left quote
+\ifa@quote \def \sc@char {'}\global\a@quotefalse
+\else \def \sc@char {`}\global\a@quotetrue
+\fi \sc@put \utf@beg }
+
+\def \utf@rquote {% right quote
+\global\a@quotefalse \def \sc@char {'}\sc@put \utf@word }
+
+\def \utf@par #1\@ \@@ {% new line, push back the rest
+\sc@back \\#1\@ \@@ }
+
+\def \utf@b@cs #1#2{% test word end
+\def \sc@char {#1}\sc@put 
+%\ifx #2\@ \def \next {\sc@endscan #2}\else
+\ifx #2\@ \def \next {\utf@end #2}\else
+\ifcat -\nxp #2 \def \next {\utf@word #2}\else
+\def \next {\sc@back #2}\fi \fi \next }
+
+\def \utf@cs #1#2{% control sequence within a word; push back?
+\xpa \ifx #1\closegeresh \def \next {\utf@b@cs {\nxp \lq }#2}\else 
+\xpa \ifx #1\closequote \def \next {\utf@b@cs {`}#2}\else 
+	\def \next {\sc@back #1#2}%
+\fi\fi \next }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\catcode `\@ = \qutfatcode
+
+\endinput
+%%%%%%%%%%%%%%%%%%%%%%%% EOF %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
