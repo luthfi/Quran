@@ -27,8 +27,10 @@ luthffffi@gmail.com
 Table of contents
 1. Tanzil Quran Repository
 2. Alqalam modified files
-
+3. Usage
 1. Tanzil Quran Repository
+We do not alter the file at all. We only process the file using script
+using file transformer.sh.
 file tanzil_quran.txt check sums:
 $ sha1sum tanzil_quran.txt 
 18d7b3873d84bb614c3b146a25b81423b50caac5  tanzil_quran.txt
@@ -41,5 +43,15 @@ $ md5sum tanzil_quran.txt
 The latex package alqalam has to be modified to accomodate this work.
 Our suggestion is simply install alqalam and its depencies(e.g. arabtex),
 then replace the original file with our mod in mod-alqalam directory.
-
+I do admit that the mod is a hack, thus be careful if it creates any
+draw back in other parts.
+3. To use this collection of program you should start from kitab.sh.
+e.g. bash kitab.sh <surah> <from ayah> <to ayah> that will trow
+the output to standar output(screen) that later you can redirect it to a file
+e.g bash kitab.sh 2 1 100 > albaqarah.tex
+will create a latex document of albaqarah: 1-100.
+then you must run latex to compile the file into pdf, i.e. by running pdflatex albaqarah.tex
+or whatever workflow suit your system.
+By default it will create Indonesian printing style AlQuran, if you want to
+fine tune it, you can examine the file transformer.sh
 
