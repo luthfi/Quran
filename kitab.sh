@@ -7,15 +7,16 @@ IFS=$'\n'
 lines=($(cat tanzil_quran.txt)) # its only 6268 element array :D, one ayah per line + acknowledgment
 IFS=$old_IFS
 
+echoerr() { echo "$@" 1>&2; }
 
 if [ ${1} -gt 114 ]; then
-    echo "wrong param:number of surah is only 114"
+    echoerr "wrong param:number of surah is only 114"
     exit 1
 fi
 
 surah=${1}
 if [ ${3} -gt ${s[$surah]} ]; then
-    echo "wrong param:number of ayah in surah ${surah} is only ${s[surah]}"
+    echoerr "wrong param:number of ayah in surah ${surah} is only ${s[surah]}"
     exit 1
 fi
 
